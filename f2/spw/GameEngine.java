@@ -21,12 +21,14 @@ public class GameEngine implements KeyListener, GameReporter{
 	
 	private long score = 0;
 	private double difficulty = 0.1;
+	private long countTime = 0;
 	
 	public GameEngine(GamePanel gp, SpaceShip v) {
 		this.gp = gp;
 		this.v = v;		
 		
 		gp.sprites.add(v);
+		generateTrap();
 		
 		timer = new Timer(50, new ActionListener() {
 			
@@ -43,6 +45,16 @@ public class GameEngine implements KeyListener, GameReporter{
 		timer.start();
 	}
 	
+	private void generateTrap(){
+		for(int i=0;i<numTrap;i++){
+			Trap t = new Trap((int)(Math.random()*390),(int)(Math.random()*500));
+			if(t.y >= 50){
+				gp.sprites.add(t);
+				trap.add(t);
+			}
+		}
+	}
+	
 	private void generateEnemy(){
 		Enemy e = new Enemy((int)(Math.random()*390), 30);
 		gp.sprites.add(e);
@@ -50,6 +62,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	}
 	
 	private void process(){
+		countTime = countTime + 50;
 		if(Math.random() < difficulty){
 			generateEnemy();
 		}
@@ -105,6 +118,9 @@ public class GameEngine implements KeyListener, GameReporter{
 
 	public long getScore(){
 		return score;
+	}
+	public long getTimes(){		
+		return countTime/1000;
 	}
 	
 	@Override
