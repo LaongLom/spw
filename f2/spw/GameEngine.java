@@ -94,6 +94,19 @@ public class GameEngine implements KeyListener, GameReporter{
 	
 	public void die(){
 		timer.stop();
+		gp.updateGameUI(this);
+	}
+	
+	public void startOver(){
+		gp.sprites.clear();
+		trap.clear();
+		enemies.clear();
+		generateTrap();
+		v.setPosition();
+		gp.sprites.add(v);
+		difficulty = 0.1;
+		countTime = 0;
+		timer.restart();	
 	}
 	
 	void controlVehicle(KeyEvent e) {
@@ -121,6 +134,9 @@ public class GameEngine implements KeyListener, GameReporter{
 	}
 	public long getTimes(){		
 		return countTime/1000;
+	}
+	public boolean getRungame(){
+		return timer.isRunning();
 	}
 	
 	@Override
