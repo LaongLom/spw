@@ -13,12 +13,15 @@ import javax.swing.Timer;
 
 public class GameEngine implements KeyListener, GameReporter{
 	GamePanel gp;
+	private Trapfunction c;
 		
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();	
 	private SpaceShip v;	
 	
 	private Timer timer;
 	
+	private static final int TIMEtrap = 3000
+	public int cd_move = 0;
 	private long score = 0;
 	private double difficulty = 0.1;
 	private long countTime = 0;
@@ -62,7 +65,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	}
 	
 	private void process(){
-		countTime = countTime + 50;
+		cooldown();
 		if(Math.random() < difficulty){
 			generateEnemy();
 		}
@@ -82,11 +85,21 @@ public class GameEngine implements KeyListener, GameReporter{
 		gp.updateGameUI(this);
 		
 		Rectangle2D.Double vr = v.getRectangle();
-		Rectangle2D.Double er;
+		Rectangle2D.Double er,tr;
 		for(Enemy e : enemies){
 			er = e.getRectangle();
 			if(er.intersects(vr)){
 				die();
+				return;
+			}
+		}
+		
+		for(Trap t : trap){
+		    tr = t.getRectangle();
+			if(tr.intersects(vr)){
+				randomTrap();
+				gp.sprites.remove(t);
+				trap.remove(t);
 				return;
 			}
 		}
@@ -106,7 +119,36 @@ public class GameEngine implements KeyListener, GameReporter{
 		gp.sprites.add(v);
 		difficulty = 0.1;
 		countTime = 0;
+		cd_move = 0;
 		timer.restart();	
+	}
+	public void cooldown() {
+		countTime = countTime + 50;
+		cd_move = cd_move - 50;
+
+		if(cd_move < 0)
+			cd_move = 0;
+
+	}
+	public boolean isCooldown_move() {
+		if(cd_move == 0){
+			c.trapControl = true;
+			return false;
+		}
+		else 
+			return true;
+	}
+	
+	public void randomTrap() {
+		int random;
+		
+		random = (int)(Math.random()*4);
+		
+		if(random < 2){
+			cd_move = cd_move + TIMEtrap;
+			c.trapControl = false;
+		}
+		
 	}
 	
 	void controlVehicle(KeyEvent e) {
@@ -135,14 +177,17 @@ public class GameEngine implements KeyListener, GameReporter{
 	public long getTimes(){		
 		return countTime/1000;
 	}
-	public boolean getRungame(){
+	public boolean isRungame(){
 		return timer.isRunning();
 	}
 	
 	@Override
 	public void keyPressed(KeyEvent e) {
-		controlVehicle(e);
-		
+			
+		if(c.trapControl || !isRungame() || !isCooldown_move())
+			controlVehicle(e);
+		else
+			c.controlVehicle(e,v);
 	}
 
 	@Override

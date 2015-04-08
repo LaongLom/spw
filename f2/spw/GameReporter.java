@@ -4,5 +4,5 @@ public interface GameReporter {
 
 	long getScore();
 	long getTimes();
-	boolean getRungame();
+	boolean isRungame();
 }
