@@ -120,6 +120,7 @@ public class GameEngine implements KeyListener, GameReporter{
 		difficulty = 0.1;
 		countTime = 0;
 		cd_move = 0;
+		v.shild = false;
 		timer.restart();	
 	}
 	public void cooldown() {
@@ -148,7 +149,9 @@ public class GameEngine implements KeyListener, GameReporter{
 			cd_move = cd_move + TIMEtrap;
 			c.trapControl = false;
 		}
-		
+		else if(random < 4){
+			v.shild = true;
+		}
 	}
 	
 	void controlVehicle(KeyEvent e) {
