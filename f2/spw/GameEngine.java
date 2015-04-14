@@ -107,6 +107,7 @@ public class GameEngine implements KeyListener, GameReporter{
 	
 	public void die(){
 		timer.stop();
+		wf.write(String.format("%3d",getTimes()));
 		gp.updateGameUI(this);
 	}
 	

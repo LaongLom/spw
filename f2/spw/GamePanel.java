@@ -13,11 +13,13 @@ public class GamePanel extends JPanel {
 	private BufferedImage bi;	
 	Graphics2D big;
 	ArrayList<Sprite> sprites = new ArrayList<Sprite>();
+	Readfile rf = new Readfile();
 
 	public GamePanel() {
 		bi = new BufferedImage(400, 600, BufferedImage.TYPE_INT_ARGB);
 		big = (Graphics2D) bi.getGraphics();
 		big.setBackground(Color.BLACK);
+		rf.readfile();
 	}
 
 	public void updateGameUI(GameReporter reporter){
@@ -25,6 +27,7 @@ public class GamePanel extends JPanel {
 		big.clearRect(0, 0, 400, 600);		
 		big.setColor(Color.WHITE);
 		big.setFont(new Font("Helvetica", Font.PLAIN, 15));
+		big.drawString(rf.gbt(),60, 20);
 		
 		big.drawString("Time", 250, 20);
 		big.drawString(String.format("%08d", reporter.getTimes()), 300, 20);
@@ -35,6 +38,7 @@ public class GamePanel extends JPanel {
 		
 		if(!reporter.getRungame()){
 			setGameOver();
+			rf.readfile();
 		}
 		repaint();
 	}
