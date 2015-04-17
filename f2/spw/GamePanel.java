@@ -27,7 +27,9 @@ public class GamePanel extends JPanel {
 		big.clearRect(0, 0, 400, 600);		
 		big.setColor(Color.WHITE);
 		big.setFont(new Font("Helvetica", Font.PLAIN, 15));
-		big.drawString(rf.gbt(),60, 20);
+		
+		big.drawString("BestTime", 70, 20);
+		big.drawString(rf.gbt(),170, 20);
 		
 		big.drawString("Time", 250, 20);
 		big.drawString(String.format("%08d", reporter.getTimes()), 300, 20);
@@ -36,10 +38,19 @@ public class GamePanel extends JPanel {
 			s.draw(big);
 		}
 		
-		if(!reporter.getRungame()){
-			setGameOver();
+		if(!reporter.isRungame() && reporter.gameIsWin()){
+			setGameWin();
 			rf.readfile();
 		}
+		else if(!reporter.isRungame()){
+			setGameOver();
+		}
+		
+		if(reporter.isCooldown_bg()){
+			big.setBackground(Color.RED);
+		}
+		else
+			big.setBackground(Color.BLACK);
 		repaint();
 	}
 	

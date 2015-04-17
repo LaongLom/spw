@@ -83,6 +83,9 @@ public class GameEngine implements KeyListener, GameReporter{
 		}
 		
 		gp.updateGameUI(this);
+		if(v.isWin()){
+			win();
+		}
 		
 		Rectangle2D.Double vr = v.getRectangle();
 		Rectangle2D.Double er,tr;
@@ -107,8 +110,13 @@ public class GameEngine implements KeyListener, GameReporter{
 	
 	public void die(){
 		timer.stop();
-		wf.write(String.format("%3d",getTimes()));
 		gp.updateGameUI(this);
+	}
+	public void win(){	
+		timer.stop();
+		if(Integer.parseInt(gp.getReadfile().trim()) > (int)(getTimes()))
+			wf.write(String.format("%3d",getTimes()));
+		gp.updateGameUI(this);			
 	}
 	
 	public void startOver(){
@@ -127,14 +135,23 @@ public class GameEngine implements KeyListener, GameReporter{
 	public void cooldown() {
 		countTime = countTime + 50;
 		cd_move = cd_move - 50;
-
+		cd_bg = cd_bg - 50;
 		if(cd_move < 0)
 			cd_move = 0;
-
+		if(cd_bg < 0)
+			cd_bg = 0;
 	}
 	public boolean isCooldown_move() {
 		if(cd_move == 0){
 			c.trapControl = true;
+			return false;
+		}
+		else 
+			return true;
+	}
+	public boolean isCooldown_bg() {
+		if(cd_bg == 0){
+			c.setBG = false;
 			return false;
 		}
 		else 
@@ -183,6 +200,9 @@ public class GameEngine implements KeyListener, GameReporter{
 	}
 	public boolean isRungame(){
 		return timer.isRunning();
+	}
+	public boolean gameIsWin(){
+		return v.isWin();
 	}
 	
 	@Override

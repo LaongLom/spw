@@ -94,5 +94,11 @@ public class SpaceShip extends Sprite{
 		x = 180;
 		y = 550;
 	}
+	public boolean isWin(){
+		if(y < 50){
+			return true;
+		}
+		return false;
+	}
 
 }
