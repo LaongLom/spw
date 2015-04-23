@@ -16,6 +16,9 @@ public class GameEngine implements KeyListener, GameReporter{
 	private Trapfunction c;
 		
 	private ArrayList<Enemy> enemies = new ArrayList<Enemy>();	
+	private ArrayList<Worm> worm = new ArrayList<Worm>();
+	private ArrayList<Trap> trap = new ArrayList<Trap>();
+	
 	private SpaceShip v;	
 	
 	private Timer timer;
@@ -71,6 +74,8 @@ public class GameEngine implements KeyListener, GameReporter{
 		}
 		
 		Iterator<Enemy> e_iter = enemies.iterator();
+		Iterator<Worm> w_iter = worm.iterator();
+		
 		while(e_iter.hasNext()){
 			Enemy e = e_iter.next();
 			e.proceed();
@@ -81,12 +86,17 @@ public class GameEngine implements KeyListener, GameReporter{
 				score += 1000;
 			}
 		}
+		while(w_iter.hasNext()){
+			Worm w = w_iter.next();
+			w.proceed();
+		}
 		
 		gp.updateGameUI(this);
 		if(v.isWin()){
 			win();
 		}
 		
+		ArrayList<Double> wormElement ;
 		Rectangle2D.Double vr = v.getRectangle();
 		Rectangle2D.Double er,tr;
 		for(Enemy e : enemies){
@@ -106,6 +116,20 @@ public class GameEngine implements KeyListener, GameReporter{
 				return;
 			}
 		}
+		for(Worm w : worm){
+		    wormElement = w.getsRectangle();
+			for(Rectangle2D.Double d : wormElement){
+				if(d.intersects(vr)){
+					if(!v.shild)
+						die();
+					v.shild = false;
+					gp.sprites.remove(w);
+					worm.remove(w);
+					return;
+				}
+			}
+			w.worms.clear();
+		}
 	}
 	
 	public void die(){
@@ -123,6 +147,7 @@ public class GameEngine implements KeyListener, GameReporter{
 		gp.sprites.clear();
 		trap.clear();
 		enemies.clear();
+		worm.clear();
 		generateTrap();
 		v.setPosition();
 		gp.sprites.add(v);
@@ -161,14 +186,23 @@ public class GameEngine implements KeyListener, GameReporter{
 	public void randomTrap() {
 		int random;
 		
-		random = (int)(Math.random()*4);
+		random = (int)(Math.random()*6);
 		
 		if(random < 2){
 			cd_move = cd_move + TIMEtrap;
 			c.trapControl = false;
 		}
-		else if(random < 4){
+		else if(random < 3){
+			cd_bg = cd_bg + TIMEtrap;
+			c.setBG = true;
+		}
+		else if(random == 4){
 			v.shild = true;
+		}
+		if(random < 5){
+			Worm w = new Worm((int)(Math.random()*390),(int)(Math.random()*200));
+			gp.sprites.add(w);
+			worm.add(w);
 		}
 	}
 	

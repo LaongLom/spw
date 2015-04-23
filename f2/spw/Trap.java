@@ -13,7 +13,11 @@ public class Trap extends Sprite{
 	@Override
 	public void draw(Graphics2D g) {
 		
-		g.setColor(Color.YELLOW);			
+		if(c.setBG)
+			g.setColor(Color.red);
+		else
+			g.setColor(Color.black);
+			
 		g.fillRect(x, y, width, height);
 		
 	}
