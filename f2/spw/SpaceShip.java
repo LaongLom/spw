@@ -9,6 +9,7 @@ public class SpaceShip extends Sprite{
 	private int i = 0;
 	private int z = 1;
 	public boolean shild = false;
+	public boolean die = false;
 	GameEngine ge;
 	
 	public SpaceShip(int x, int y, int width, int height) {

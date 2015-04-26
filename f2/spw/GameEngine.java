@@ -102,9 +102,17 @@ public class GameEngine implements KeyListener, GameReporter{
 		for(Enemy e : enemies){
 			er = e.getRectangle();
 			if(er.intersects(vr)){
-				die();
+				if(!v.shild){
+					setboom();
+					boom = true;
+				}
+				v.shild = false;
+				enemies.remove(e);
+				gp.sprites.remove(e);
 				return;
 			}
+			if(isBoom())
+				die();
 		}
 		
 		for(Trap t : trap){
@@ -120,13 +128,17 @@ public class GameEngine implements KeyListener, GameReporter{
 		    wormElement = w.getsRectangle();
 			for(Rectangle2D.Double d : wormElement){
 				if(d.intersects(vr)){
-					if(!v.shild)
-						die();
+					if(!v.shild){
+						setboom();
+						boom = true;
+					}
 					v.shild = false;
 					gp.sprites.remove(w);
 					worm.remove(w);
 					return;
 				}
+				if(isBoom())
+				die();
 			}
 			w.worms.clear();
 		}
